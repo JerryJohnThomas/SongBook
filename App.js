@@ -1,25 +1,28 @@
 import { StatusBar } from "expo-status-bar";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-// import mlindex from "./data/mlindex.json";
-import mlindex from "./data/mlindex_mini.json";
+import mlindex from "./data/mlindex.json";
+// import mlindex from "./data/mlindex_mini.json";
 import SongScreen from "./SongScreen";
 import Navbar from "./Navbar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { createContext, useState } from "react";
-import  { appContext } from "./appContext"
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { appContext } from "./appContext";
+import NumberModal from "./NumberModal";
 
 export default function App() {
-    let [contextValue,setContextValue] = useState({ isEng: false, text: "boom" });
+    const flatListRef = useRef(null);
+    let [contextValue, setContextValue] = useState({ isEng: false, text: "boom", isModalOpen: false, flatListRef: flatListRef });
 
     return (
         <>
-        
-            <appContext.Provider value={contextValue}>
+            <appContext.Provider value={{ contextValue, setContextValue }}>
                 <SafeAreaProvider>
                     <SafeAreaView style={[styles.safe_container]}>
                         <View style={styles.container}>
                             <Navbar setContextValue={setContextValue} />
                             <FlatList
+                                initialNumToRender={20}
+                                ref={flatListRef}
                                 data={mlindex
                                     .map((item) => item.Songs)
                                     .flat()
@@ -29,8 +32,17 @@ export default function App() {
                                 horizontal
                                 pagingEnabled
                                 showsHorizontalScrollIndicator={false}
+                                onScrollToIndexFailed={(error) => {
+                                    flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: false });
+                                    setTimeout(() => {
+                                        if (flatListRef !== null) {
+                                            flatListRef.current.scrollToIndex({ index: error.index, animated: false });
+                                        }
+                                    }, 1);
+                                }}
                             />
                             <StatusBar style="auto" />
+                            {contextValue.isModalOpen ? <NumberModal /> : null}
                         </View>
                     </SafeAreaView>
                 </SafeAreaProvider>

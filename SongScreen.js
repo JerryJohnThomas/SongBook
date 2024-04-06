@@ -6,7 +6,7 @@ const SongScreen = ({ item }) => {
     const colors = ["#4464AD", "#A4B0F5", "#F58F29"];
     const { width, height } = Dimensions.get("window");
     let langIndex = 0;
-    let contextValue = useContext(appContext);
+    let {contextValue,setContextValue} = useContext(appContext);
 
     return (
         <View style={[styles.container, { height, width }]}>

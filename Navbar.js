@@ -1,16 +1,22 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Ionicons, Octicons } from "@expo/vector-icons"; // Import Ionicons
+import { appContext } from "./appContext";
 
-const Navbar = ({ setContextValue }) => {
+const Navbar = () => {
     const { width, height } = Dimensions.get("window");
+    let {contextValue,setContextValue} = useContext(appContext);
 
     let languageHandler = () => {
         // alert("language");
-        setContextValue(prevValue => ({ ...prevValue, isEng: !prevValue.isEng }));
+        setContextValue((prevValue) => ({ ...prevValue, isEng: !prevValue.isEng }));
     };
     let searchHandler = () => {
         // setContextValue({ isEng: false, text: "GO" });
+    };
+
+    let numberHandler = ()=>{
+        setContextValue((prevValue) => ({ ...prevValue, isModalOpen: !prevValue.isModalOpen }));
     };
 
     return (
@@ -23,7 +29,9 @@ const Navbar = ({ setContextValue }) => {
                 <TouchableOpacity onPress={() => searchHandler()}>
                     <Ionicons style={styles.icon_style} name="search" size={24} color="white" />
                 </TouchableOpacity>
-                <Octicons style={styles.icon_style} name="number" size={24} color="white" />
+                <TouchableOpacity onPress={() => numberHandler()}>
+                    <Octicons style={styles.icon_style} name="number" size={24} color="white" />
+                </TouchableOpacity>
             </View>
         </View>
     );
