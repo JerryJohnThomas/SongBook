@@ -1,25 +1,29 @@
 import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
+import { appContext } from "./appContext";
 
 const SongScreen = ({ item }) => {
     const colors = ["#4464AD", "#A4B0F5", "#F58F29"];
     const { width, height } = Dimensions.get("window");
     let langIndex = 0;
+    let contextValue = useContext(appContext);
 
     return (
         <View style={[styles.container, { height, width }]}>
             <View style={styles.number}>
-                <Text style={styles.numberText}>{item.SongNo}</Text>
+                <Text style={styles.numberText}>
+                    {item.SongNo}
+                </Text>
             </View>
             {/* <View style={styles.title}>
                 <Text style={styles.titleText}>{item.Title}</Text>
             </View> */}
-            <ScrollView style={styles.body} showsVerticalScrollIndicator= {false}>
-                <Text style={styles.bodyText}>{item.Lyrics[langIndex]}</Text>
+            <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
+                <Text style={styles.bodyText}>{item.Lyrics[contextValue.isEng == true ? 1 : 0]}</Text>
             </ScrollView>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -34,12 +38,12 @@ const styles = StyleSheet.create({
     bodyText: {
         fontSize: 18,
     },
-    numberText:{
+    numberText: {
         fontSize: 22,
     },
-    titleText:{
+    titleText: {
         fontSize: 22,
-    }
+    },
 });
 
 export default SongScreen;
