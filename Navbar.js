@@ -5,7 +5,7 @@ import { appContext } from "./appContext";
 
 const Navbar = () => {
     const { width, height } = Dimensions.get("window");
-    let {contextValue,setContextValue} = useContext(appContext);
+    let { contextValue, setContextValue } = useContext(appContext);
 
     let languageHandler = () => {
         // alert("language");
@@ -15,13 +15,21 @@ const Navbar = () => {
         // setContextValue({ isEng: false, text: "GO" });
     };
 
-    let numberHandler = ()=>{
+    let numberHandler = () => {
         setContextValue((prevValue) => ({ ...prevValue, isModalOpen: !prevValue.isModalOpen }));
     };
 
+    let infoHandler = () => {
+        setContextValue((prevValue) => ({ ...prevValue, isInfoOpen: !prevValue.isInfoOpen }));
+    };
+
+    
+
     return (
         <View style={[styles.container, { width: width }]}>
-            <Text style={styles.text}>Songbook</Text>
+            <TouchableOpacity onPress={() => infoHandler()}>
+                <Text style={styles.text}>Songbook</Text>
+            </TouchableOpacity>
             <View style={styles.rightnav}>
                 <TouchableOpacity onPress={() => languageHandler()}>
                     <Ionicons style={styles.icon_style} name="language" size={24} color="white" />

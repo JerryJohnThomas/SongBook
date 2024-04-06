@@ -8,10 +8,11 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { appContext } from "./appContext";
 import NumberModal from "./NumberModal";
+import InfoModal from "./InfoModal";
 
 export default function App() {
     const flatListRef = useRef(null);
-    let [contextValue, setContextValue] = useState({ isEng: false, text: "boom", isModalOpen: false, flatListRef: flatListRef });
+    let [contextValue, setContextValue] = useState({ isEng: false, text: "boom", isModalOpen: false, flatListRef: flatListRef , isInfoOpen: false});
 
     return (
         <>
@@ -43,6 +44,7 @@ export default function App() {
                             />
                             <StatusBar style="auto" />
                             {contextValue.isModalOpen ? <NumberModal /> : null}
+                            {contextValue.isInfoOpen? <InfoModal /> : null}
                         </View>
                     </SafeAreaView>
                 </SafeAreaProvider>
