@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, SectionList, StyleSheet, Text, View, Dimensions } from "react-native";
 import mlindex from "./data/mlindex.json";
 // import mlindex from "./data/mlindex_mini.json";
 import SongScreen from "./SongScreen";
@@ -10,9 +10,12 @@ import { appContext } from "./appContext";
 import NumberModal from "./NumberModal";
 import InfoModal from "./InfoModal";
 
+import { FlashList } from "@shopify/flash-list";
+const { width, height } = Dimensions.get("window");
+
 export default function App() {
     const flatListRef = useRef(null);
-    let [contextValue, setContextValue] = useState({ isEng: false, text: "boom", isModalOpen: false, flatListRef: flatListRef , isInfoOpen: false});
+    let [contextValue, setContextValue] = useState({ isEng: false, text: "boom", isModalOpen: false, flatListRef: flatListRef, isInfoOpen: false });
 
     return (
         <>
@@ -21,30 +24,33 @@ export default function App() {
                     <SafeAreaView style={[styles.safe_container]}>
                         <View style={styles.container}>
                             <Navbar setContextValue={setContextValue} />
-                            <FlatList
-                                initialNumToRender={20}
-                                ref={flatListRef}
-                                data={mlindex
-                                    .map((item) => item.Songs)
-                                    .flat()
-                                    .sort((a, b) => a.SongNo - b.SongNo)}
-                                renderItem={({ item }) => <SongScreen item={item} />}
-                                keyExtractor={(item, index) => item.SongNo}
-                                horizontal
-                                pagingEnabled
-                                showsHorizontalScrollIndicator={false}
-                                onScrollToIndexFailed={(error) => {
-                                    flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: false });
-                                    setTimeout(() => {
-                                        if (flatListRef !== null) {
-                                            flatListRef.current.scrollToIndex({ index: error.index, animated: false });
-                                        }
-                                    }, 1);
-                                }}
-                            />
+                            <View style={styles.flashcontainer}>
+                                <FlashList
+                                    estimatedItemSize={100}
+                                    initialNumToRender={20}
+                                    ref={flatListRef}
+                                    data={mlindex
+                                        .map((item) => item.Songs)
+                                        .flat()
+                                        .sort((a, b) => a.SongNo - b.SongNo)}
+                                    renderItem={({ item }) => <SongScreen item={item} />}
+                                    keyExtractor={(item, index) => item.SongNo}
+                                    horizontal
+                                    pagingEnabled
+                                    showsHorizontalScrollIndicator={false}
+                                    onScrollToIndexFailed={(error) => {
+                                        flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: false });
+                                        setTimeout(() => {
+                                            if (flatListRef !== null) {
+                                                flatListRef.current.scrollToIndex({ index: error.index, animated: false });
+                                            }
+                                        }, 1);
+                                    }}
+                                />
+                            </View>
                             <StatusBar style="auto" />
                             {contextValue.isModalOpen ? <NumberModal /> : null}
-                            {contextValue.isInfoOpen? <InfoModal /> : null}
+                            {contextValue.isInfoOpen ? <InfoModal /> : null}
                         </View>
                     </SafeAreaView>
                 </SafeAreaProvider>
@@ -64,4 +70,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#CAD2C5",
     },
+    flashcontainer:{
+        flex: 1, /* Ensure the container takes up available space */
+    }
 });
