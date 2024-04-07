@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Pressable } from "react-native";
 import React, { useContext } from "react";
 import { Ionicons, Octicons } from "@expo/vector-icons"; // Import Ionicons
 import { appContext } from "./appContext";
+import { Link } from "expo-router";
 
 const Navbar = () => {
     const { width, height } = Dimensions.get("window");
@@ -23,8 +24,6 @@ const Navbar = () => {
         setContextValue((prevValue) => ({ ...prevValue, isInfoOpen: !prevValue.isInfoOpen }));
     };
 
-    
-
     return (
         <View style={[styles.container, { width: width }]}>
             <TouchableOpacity onPress={() => infoHandler()}>
@@ -34,9 +33,13 @@ const Navbar = () => {
                 <TouchableOpacity onPress={() => languageHandler()}>
                     <Ionicons style={styles.icon_style} name="language" size={24} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => searchHandler()}>
-                    <Ionicons style={styles.icon_style} name="search" size={24} color="white" />
-                </TouchableOpacity>
+
+                <Link href="/SearchByText" asChild>
+                    <Pressable>
+                        <Ionicons style={styles.icon_style} name="search" size={24} color="white" />
+                    </Pressable>
+                </Link>
+
                 <TouchableOpacity onPress={() => numberHandler()}>
                     <Octicons style={styles.icon_style} name="number" size={24} color="white" />
                 </TouchableOpacity>

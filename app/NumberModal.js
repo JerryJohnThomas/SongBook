@@ -1,9 +1,9 @@
-import { FlatList, StyleSheet, Text, View, Dimensions, TextInput, Button, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, Text, View, Dimensions, TextInput, Button, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import React, { useContext, useState } from "react";
 import { appContext } from "./appContext";
 import { Keyboard } from "react-native";
-
 const { width, height } = Dimensions.get("window");
+
 const NumberModal = () => {
     let { contextValue, setContextValue } = useContext(appContext);
     let [number, setNumber] = useState("");
@@ -35,20 +35,22 @@ const NumberModal = () => {
 
     return (
         <View style={[styles.backgroundcontainer, { width, height }]}>
-            <View style={styles.modal_container}>
-                <Text style={styles.prompt}>Enter Song Number</Text>
-                <TextInput keyboardType="numeric" style={styles.inpNumber} value={number} onChangeText={setNumber} />
-                <View>
-                    <View style={styles.buttonrow}>
-                        <TouchableOpacity onPress={handleSubmit}>
-                            <Text style={styles.Button}>Submit</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleCancel}>
-                            <Text style={styles.Button}>Cancel</Text>
-                        </TouchableOpacity>
+            <KeyboardAvoidingView>
+                <View style={styles.modal_container}>
+                    <Text style={styles.prompt}>Enter Song Number</Text>
+                    <TextInput keyboardType="numeric" style={styles.inpNumber} value={number} onChangeText={setNumber} />
+                    <View>
+                        <View style={styles.buttonrow}>
+                            <TouchableOpacity onPress={handleSubmit}>
+                                <Text style={styles.Button}>Submit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleCancel}>
+                                <Text style={styles.Button}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </View>
     );
 };
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         borderRadius: 5,
         justifyContent: "center",
+        marginBottom: 0.2*height,
     },
     buttonrow: {
         // flex:1,
